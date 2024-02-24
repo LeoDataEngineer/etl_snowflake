@@ -1,0 +1,57 @@
+name: Extract_data_snowflow
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '*/5 * * * *'  # Ejecutar cada minuto
+
+jobs:
+        
+   extract_snowfalke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
+      - run: python ./scripts/extract_from_snowflake.py
+        env:
+          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+      - name: Extrae data snowflake
+        uses: actions/upload-artifact@v4
+        with:
+          name: data_snow
+          path: data_snow.csv
+                
+   read_save_repo:
+      runs-on: ubuntu-latest
+      needs: extract_snowfalke
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.10'
+            cache: 'pip' # caching pip dependencies
+        - run: pip install -r requirements.txt
+        # Paso para descargar el artefacto
+        - name: Download artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: data_snow
+            path: data_snow
+  
+        # Paso para agregar y subir el archivo CSV al repositorio
+        - name: Add and commit CSV file
+          run: |
+            git config --local user.email "action@github.com"
+            git config --local user.name "Automated"
+            git add data_snow
+            git commit -m "Add data_snow.csv"
+            git push origin HEAD:main
+
+          env:
+            GHUB_TOKEN: ${{ secrets.GHUB_TOKEN}}   
