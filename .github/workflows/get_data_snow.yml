@@ -46,12 +46,18 @@ jobs:
   
         # Paso para agregar y subir el archivo CSV al repositorio
         - name: Add and commit CSV file
-          run: |
-            git config --local user.email "action@github.com"
-            git config --local user.name "Automated"
+          run: |-
+            git config user.name "Automated"
+            git config user.email "actions@users.noreply.github.com"
             git add data_snow
             git commit -m "Add data_snow.csv"
-            git push origin HEAD:main
+            timestamp=$(date -u)
+            git diff --quiet && git diff --cached --quiet || git commit -m "Latest data: ${timestamp}" && git push origin main
+          #   git config --local user.email "action@github.com"
+          #   git config --local user.name "Automated"
+          #   git add data_snow
+          #   git commit -m "Add data_snow.csv"
+          #   git push origin HEAD:main
 
           env:
             GHUB_TOKEN: ${{ secrets.GHUB_TOKEN}}   
