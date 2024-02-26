@@ -21,14 +21,15 @@ jobs:
           run: pip install -r requirements.txt
 
         - name: Crear directorio data_snow  y Run Script
-          run: |
-              mkdir -p data_snow 
-              python ./scripts/extract_from_snowflake.py
+          run: python ./scripts/extract_from_snowflake.py
           env:
             SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
             SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
             SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          
+            
+        - name: Move data_snow.csv to root directory
+          run: |
+             mv ./data_snow/data_snow.csv ./ 
         - name: commit and push changes
           uses: stefanzweifel/git-auto-commit-action@v5
           with:
