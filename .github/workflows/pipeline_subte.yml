@@ -1,0 +1,97 @@
+name: pipeline_subte
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '*/5 * * * *'  # Ejecutar cada minuto
+jobs:
+    extract:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                python-version: '3.10' 
+                cache: 'pip' # caching pip dependencies
+            - run: pip install -r requirements.txt
+            - run: python ./scripts/extract.py
+            - name: Extrae data en un csv
+              uses: actions/upload-artifact@v4
+              with:
+                name: subte_data_raw
+                path: subte_data_raw.csv
+    processed:
+        runs-on: ubuntu-latest
+        needs: extract
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-python@v5
+            with:
+              python-version: '3.10' 
+              cache: 'pip' # caching pip dependencies
+          - name: Descargar datos extraídos
+            uses: actions/download-artifact@v4
+            with:
+              name: subte_data_raw
+          - run: pip install -r requirements.txt
+          - run: python ./scripts/processed.py
+          - name: Procesa data en un csv
+            uses: actions/upload-artifact@v4
+            with:
+              name: subte_data_processed
+              path: subte_data_processed.csv
+
+    load:
+        runs-on: ubuntu-latest
+        needs: processed
+        steps: 
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                python-version: '3.10' 
+                cache: 'pip' # caching pip dependencies
+            - run: pip install -r requirements.txt
+            - name: Download users data from Extract Job
+              uses: actions/download-artifact@v4
+              with:
+                name: subte_data_processed
+            - name: Subir datos a snowflake
+              run: python ./scripts/load.py
+              env:
+                SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+                SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+                SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+
+    data_set:
+      runs-on: ubuntu-latest
+      permissions: 
+           contents: write
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v4
+
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+             python-version: '3.11'
+             cache: 'pip'
+        - name: Install dependece
+          run: pip install -r requirements.txt
+
+        - name: Crear directorio data_snow  y Run Script
+          run:  |
+            mkdir -p data_snow
+            python ./scripts/extract_from_snowflake.py
+          env:
+            SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+            SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+            SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+            
+        - name: Move data_snow.csv to data_snow directory
+          run: |
+            mv data_snow.csv data_snow/
+             
+        - name: commit and push changes
+          uses: stefanzweifel/git-auto-commit-action@v5
+          with:
+            commit_message: Update dataset            
