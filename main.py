@@ -48,7 +48,7 @@ async def root():
 def obtener_pronostico_data_subte():
     
     # Filtrar datos según los parámetros de la solicitud
-    df = pd.read_csv('./data_snow/data_snow')
+    df = pd.read_csv('./data_snow/data_snow.csv')
     
     return df
 
@@ -62,7 +62,7 @@ def obtener_pronostico_data_subte():
         )
   
 def obtener_pronostico_delay_subte(linea_de_subte : str, direccion_a: str, estacion: str):
-     df_pronostico = pd.read_csv('./data_snow/data_snow')
+     df_pronostico = pd.read_csv('./data_snow/data_snow.csv')
     
     # Filtrar datos según los parámetros de la solicitud
     resultado_loc = df_pronostico.loc[(df_pronostico['Route_Id'] == linea_de_subte) & 
