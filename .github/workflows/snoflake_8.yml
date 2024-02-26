@@ -30,6 +30,7 @@ jobs:
         - name: commit and push changes
           uses: stefanzweifel/git-auto-commit-action@v5
           with:
+            path: data_snow
             commit_message: Update dataset
           
               
