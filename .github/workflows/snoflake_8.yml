@@ -16,10 +16,17 @@ jobs:
           uses: actions/setup-python@v5
           with:
              python-version: '3.11'
+             cache: 'pip'
+        - name: Install dependece
+          run: pip install -r requirements.txt
 
         - name: Run Script
           run: python ./scripts/extract_from_snowflake.py
-
+          env:
+            SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+            SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+            SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          
         - name: commit and push changes
           uses: stefanzweifel/git-auto-commit-action@v5
           with:
