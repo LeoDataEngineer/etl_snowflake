@@ -1,0 +1,31 @@
+name: Data set Subte
+on:
+  push:
+      branches: [main]
+
+jobs:
+   data_set:
+      runs-on: ubuntu-latest
+      permissions: 
+           contents: write
+      steps:
+        - name: Checkout repo
+          uses: actions/checkout@v4
+
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+             python-version: '3.11'
+
+        - name: Run Script
+          run: python ./scripts/extract_from_snowflake.py
+
+        - name: commit and push changes
+          uses: stefanzweifel/git-auto-commit-action@v5
+          with:
+            commit_message: Update dataset
+          
+              
+          
+        
+   
