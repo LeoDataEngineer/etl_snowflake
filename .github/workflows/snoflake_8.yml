@@ -20,8 +20,10 @@ jobs:
         - name: Install dependece
           run: pip install -r requirements.txt
 
-        - name: Run Script
-          run: python ./scripts/extract_from_snowflake.py
+        - name: Crear directorio data_snow  y Run Script
+          run: |
+              mkdir -p data_snow 
+              python ./scripts/extract_from_snowflake.py
           env:
             SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
             SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
@@ -30,7 +32,6 @@ jobs:
         - name: commit and push changes
           uses: stefanzweifel/git-auto-commit-action@v5
           with:
-            path: data_snow
             commit_message: Update dataset
           
               
