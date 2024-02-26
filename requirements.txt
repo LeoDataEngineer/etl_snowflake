@@ -1,3 +1,5 @@
+﻿fastapi==0.109.1
+uvicorn
 requests
 snowflake-connector-python[pandas]
 pandas
