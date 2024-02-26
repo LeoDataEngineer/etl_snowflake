@@ -64,6 +64,7 @@ jobs:
 
     data_set:
       runs-on: ubuntu-latest
+      needs: load
       permissions: 
            contents: write
       steps:
