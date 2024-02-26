@@ -22,12 +22,17 @@ jobs:
 
         - name: Crear directorio data_snow  y Run Script
           run:  |
-            python ./scripts/extract_from_snowflake.py
+            mkdir -p data_snow
+            python ../scripts/extract_from_snowflake.py
           env:
             SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
             SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
             SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
             
+        - name: Move data_snow.csv to data_snow directory
+          run: |
+            mv data_snow.csv data_snow/
+             
         - name: Add and commit CSV file
           run: |-
                 git config user.name "Automated"
