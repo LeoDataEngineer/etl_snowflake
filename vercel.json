@@ -5,6 +5,7 @@
       "use": "@vercel/python"
     }
   ],
+  "version": 2,
   "routes": [
     {
       "src": "/(.*)",
