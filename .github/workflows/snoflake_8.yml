@@ -1,44 +1,43 @@
 name: Data set Subte
 on:
-   workflow_dispatch:
-  # push:
-  #     branches: [main]
+  workflow_dispatch:
+    # push:
+    #   branches: [main]
 
 jobs:
-   data_set:
-      runs-on: ubuntu-latest
-      permissions: 
-           contents: write
-      steps:
-        - name: Checkout repo
-          uses: actions/checkout@v4
+  data_set:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-        - name: Setup Python
-          uses: actions/setup-python@v5
-          with:
-             python-version: '3.11'
-             cache: 'pip'
-        - name: Install dependece
-          run: pip install -r requirements.txt
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
 
-        - name: Crear directorio data_snow  y Run Script
-          run:  |
-            mkdir -p data_snow
-            python ./scripts/extract_from_snowflake.py
-          env:
-            SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
-            SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
-            SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-        
-        - name: Guardar CSV en otro repositorio
-          uses: ad-m/github-push-action@master
-          with:
-             github_token: ${{ secrets.GHUB_TOKEN }}
-             branch: main
-             repository: LeoDataEngineer/api_subte_2
-             directory: https://github.com/LeoDataEngineer/api_subte_2  # Ruta donde deseas guardar el archivo
-             force: true  
+      - name: Create data_snow directory and Run Script
+        run: |
+          mkdir -p data_snow
+          python ./scripts/extract_from_snowflake.py
+        env:
+          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+
+      - name: Guardar CSV en otro repositorio
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GHUB_TOKEN }}
+          branch: main
+          repository: LeoDataEngineer/api_subte_2
+          directory: data  # Reemplaza 'data_snow' con el nombre real del directorio
 
         # - name: Move data_snow.csv to data_snow directory
         #   run: |
