@@ -31,13 +31,22 @@ jobs:
           SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
 
+      - name: Check if data_snow directory exists
+        run: |
+          if [ ! -d "data_snow" ]; then
+            echo "Directory 'data_snow' does not exist. Creating..."
+            mkdir data_snow
+          else
+            echo "Directory 'data_snow' already exists."
+          fi
+
       - name: Guardar CSV en otro repositorio
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GHUB_TOKEN }}
           branch: main
           repository: LeoDataEngineer/api_subte_2
-          directory: data  # Reemplaza 'data_snow' con el nombre real del directorio
+          directory: data_snow
 
         # - name: Move data_snow.csv to data_snow directory
         #   run: |
