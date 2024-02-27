@@ -1,14 +1,12 @@
 from time import time
 from fastapi import FastAPI, HTTPException, __version__
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 import pandas as pd
-from snowflake.connector.pandas_tools import write_pandas
-import snowflake.connector
-import os 
-import snowflake.connector
+import subprocess
 # Se crea una instancia de la aplicación FastAPI
 app = FastAPI()
-
+pronostico = pd.read_csv('data_snow/data_snow.csv')
 
 # HTML que se enviará como respuesta en la ruta "/"
 html = f"""
@@ -46,9 +44,7 @@ async def root():
         )
   
 def obtener_pronostico_data_subte():
-    
-    # Filtrar datos según los parámetros de la solicitud
-    df = pd.read_csv('./data_snow/data_snow.csv')
+    df = pronostico
     
     return df
 
@@ -62,7 +58,7 @@ def obtener_pronostico_data_subte():
         )
   
 def obtener_pronostico_delay_subte(linea_de_subte : str, direccion_a: str, estacion: str):
-     df_pronostico = pd.read_csv('./data_snow/data_snow.csv')
+     df_pronostico = pronostico
     
     # Filtrar datos según los parámetros de la solicitud
     resultado_loc = df_pronostico.loc[(df_pronostico['Route_Id'] == linea_de_subte) & 
