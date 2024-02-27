@@ -29,15 +29,25 @@ jobs:
             SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
             SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
             SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-            
-        - name: Move data_snow.csv to data_snow directory
-          run: |
-            mv data_snow.csv data_snow/
+
+        
+        - name: Guardar CSV en otro repositorio
+          uses: ad-m/github-push-action@master
+             with:
+               github_token: ${{ secrets.GHUB_TOKEN }}
+          branch: main
+          repository: LeoDataEngineer/api_subte_2
+          directory: https://github.com/LeoDataEngineer/api_subte_2  # Ruta donde deseas guardar el archivo
+          force: true  
+
+        # - name: Move data_snow.csv to data_snow directory
+        #   run: |
+        #     mv data_snow.csv data_snow/
              
-        - name: commit and push changes
-          uses: stefanzweifel/git-auto-commit-action@v5
-          with:
-            commit_message: Update dataset
+        # - name: commit and push changes
+        #   uses: stefanzweifel/git-auto-commit-action@v5
+        #   with:
+        #     commit_message: Update dataset  
           
               
           
