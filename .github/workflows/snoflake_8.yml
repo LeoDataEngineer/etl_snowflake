@@ -1,48 +1,42 @@
-name: Data set Subte
+name: data_set
+
 on:
   workflow_dispatch:
-    # push:
-    #   branches: [main]
-
+  # schedule:
+  #   - cron: '*/5 * * * *'  # Ejecutar cada minuto
+  
 jobs:
   data_set:
     runs-on: ubuntu-latest
-    permissions: 
-      contents: write
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-          token: ${{ secrets.GHUB_TOKEN }}
+        - name: Checkout repo
+          uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+             python-version: '3.11'
+             cache: 'pip'
+        - name: Install dependece
+          run: pip install -r requirements.txt
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Create data_snow directory and Run Script
-        run: |
-          mkdir -p data_snow
-          python ./scripts/extract_from_snowflake.py
-        env:
-          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
-          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
-          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          
-      - name: Guardar CSV en otro repositorio
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GHUB_TOKEN }}
-          branch: main
-          repository: LeoDataEngineer/api_subte_2
-          directory: data_snow
-          
+        - name: Crear directorio data_snow  y Run Script
+          run:  |
+            mkdir -p data_snow
+            python ./scripts/extract_from_snowflake.py
+          env:
+            SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+            SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+            SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+            
+        - name: Move data_snow.csv to data_snow directory
+          run: |
+            mv data_snow.csv data_snow/
+             
+        - name: commit and push changes
+          uses: stefanzweifel/git-auto-commit-action@v5
+          with:
+            commit_message: Update dataset      
               
           
         
