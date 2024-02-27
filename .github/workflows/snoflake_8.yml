@@ -1,7 +1,7 @@
 name: Data set Subte
 on:
-  push:
-      branches: [main]
+  # push:
+  #     branches: [main]
 
 jobs:
    data_set:
