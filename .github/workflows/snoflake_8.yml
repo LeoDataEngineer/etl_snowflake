@@ -31,15 +31,6 @@ jobs:
           SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
 
-      - name: Check if data_snow directory exists
-        run: |
-          if [ ! -d "data_snow" ]; then
-            echo "Directory 'data_snow' does not exist. Creating..."
-            mkdir data_snow
-          else
-            echo "Directory 'data_snow' already exists."
-          fi
-
       - name: Guardar CSV en otro repositorio
         uses: ad-m/github-push-action@master
         with:
