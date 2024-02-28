@@ -2,8 +2,11 @@ import requests
 import pandas as pd
 
 def get_data():
-    endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
-
+   # endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
+    CLIENT_ID: ${{ secrets.CLIENT_ID }}
+    CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+    endpoint_subte="https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}"
+   
     try:
         response = requests.get(endpoint_subte)
         if response.status_code == 200:
