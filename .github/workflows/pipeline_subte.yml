@@ -9,10 +9,10 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     steps:
-      - name: Obtener credenciales
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      # - name: Obtener credenciales
+      #   env:
+      #     CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #     CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
