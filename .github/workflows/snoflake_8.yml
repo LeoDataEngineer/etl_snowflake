@@ -43,9 +43,9 @@ jobs:
           mkdir -p LeoDataEngineer/subte_api_vercel/data/
           cp data_snow/data_snow.csv LeoDataEngineer/subte_api_vercel/data/
 
-      - name: Commit and push changes to data repository
+      - name: Commit and push changes to LeoDataEngineer/subte_api_vercel/data/  repository
         run: |
-          cd data
+          cd LeoDataEngineer/subte_api_vercel/data
           git config user.email "you@example.com"
           git config user.name "Your Name"
           git add .
