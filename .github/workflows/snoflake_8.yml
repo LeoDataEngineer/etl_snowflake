@@ -60,7 +60,7 @@ jobs:
           git commit -m "Enviar archivos desde el repositorio origen"
         
           # Push los cambios al repositorio destino
-          git push origin main
+          git remote set-url origin https://github.com/LeoDataEngineer/subte_api_vercel.git
         env:
           GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
 
