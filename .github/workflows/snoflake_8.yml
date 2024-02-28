@@ -39,7 +39,9 @@ jobs:
           token: ${{ secrets.GHUB_TOKEN }} # Replace YOUR_PAT with your Personal Access Token
 
       - name: Copy data_snow.csv to data_set repository
-        run: cp data_snow/data_snow.csv LeoDataEngineer/subte_api_vercel/data/
+        run: |
+          mkdir -p LeoDataEngineer/subte_api_vercel/data/
+          cp data_snow/data_snow.csv LeoDataEngineer/subte_api_vercel/data/
 
       - name: Commit and push changes to data_set repository
         run: |
