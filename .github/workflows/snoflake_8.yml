@@ -35,19 +35,20 @@ jobs:
       - name: Clone data_set repository
         uses: actions/checkout@v2
         with:
-          repository: LeoDataEngineer/etl_snowflake_actions
-          token: ${{ secrets.GHUB_TOKEN }} # Replace YOUR_PAT with your Personal Access Token
+          repository: LeoDataEngineer/subte_api_vercel
+          path: subte_api_vercel # Clone repository to a subdirectory
 
-      - name: Copy data_snow.csv to data_set repository
+      - name: Copy data_snow.csv to LeoDataEngineer/subte_api_vercel/data repository
         run: |
-          mkdir -p LeoDataEngineer/subte_api_vercel/data/
-          cp data_snow/data_snow.csv LeoDataEngineer/subte_api_vercel/data/
+          mkdir -p data
+          cp ../data_snow/data_snow.csv data/
 
-      - name: Commit and push changes to LeoDataEngineer/subte_api_vercel/data/  repository
+      - name: Commit and push changes to LeoDataEngineer/subte_api_vercel/data/ repository
         run: |
-          cd LeoDataEngineer/subte_api_vercel/data
+          cd ..
           git config user.email "you@example.com"
           git config user.name "Your Name"
           git add .
           git commit -m "Update data"
           git push
+
