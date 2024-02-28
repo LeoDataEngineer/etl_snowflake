@@ -50,8 +50,8 @@ jobs:
           cd mi_repo_destino
         
           # Configura Git
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
+          git config --local user.email "leomarestradabsas@gmail.com"
+          git config --local user.name "LeoDataEngineer"
         
           # Agrega los archivos al área de preparación
           git add .
