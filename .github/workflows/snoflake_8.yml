@@ -1,43 +1,49 @@
-name: data_set
-
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '*/5 * * * *'  # Ejecutar cada minuto
-  
+
 jobs:
   data_set:
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout repo
-          uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-        - name: Setup Python
-          uses: actions/setup-python@v5
-          with:
-             python-version: '3.11'
-             cache: 'pip'
-        - name: Install dependece
-          run: pip install -r requirements.txt
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
 
-        - name: Crear directorio data_snow  y Run Script
-          run:  |
-            mkdir -p data_snow
-            python ./scripts/extract_from_snowflake.py
-          env:
-            SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
-            SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
-            SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-            
-        - name: Move data_snow.csv to data_snow directory
-          run: |
-            mv data_snow.csv data_snow/
-             
-        - name: commit and push changes
-          uses: stefanzweifel/git-auto-commit-action@v5
-          with:
-            commit_message: Update dataset      
-              
-          
-        
-   
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Crear directorio data_snow y Run Script
+        run:  |
+          mkdir -p data_snow
+          python ./scripts/extract_from_snowflake.py
+        env:
+          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+
+      - name: Move data_snow.csv to data_snow directory
+        run: |
+          mv data_snow.csv data_snow/
+
+      - name: Clone data_set repository
+        uses: actions/checkout@v2
+        with:
+          repository: LeoDataEngineer/etl_snowflake_actions
+          token: ${{ secrets.GHUB_TOKEN }} # Replace YOUR_PAT with your Personal Access Token
+
+      - name: Copy data_snow.csv to data_set repository
+        run: cp data_snow/data_snow.csv LeoDataEngineer/subte_api_vercel/data/
+
+      - name: Commit and push changes to data_set repository
+        run: |
+          cd data_set
+          git config user.email "you@example.com"
+          git config user.name "Your Name"
+          git add .
+          git commit -m "Update dataset"
+          git push
