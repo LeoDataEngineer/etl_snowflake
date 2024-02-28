@@ -3,10 +3,10 @@ import pandas as pd
 
 
 def get_data():
-    # endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
-    client_id = "CLIENT_ID"  # Asigna tu client_id aquí
-    client_secret = "CLIENT_SECRET"  # Asigna tu client_secret aquí
-    endpoint_subte = f"https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id={client_id}&client_secret={client_secret}"
+    endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
+    # client_id = "CLIENT_ID"  # Asigna tu client_id aquí
+    # client_secret = "CLIENT_SECRET"  # Asigna tu client_secret aquí
+    # endpoint_subte = f"https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id={client_id}&client_secret={client_secret}"
     try:
         response = requests.get(endpoint_subte)
         if response.status_code == 200:
