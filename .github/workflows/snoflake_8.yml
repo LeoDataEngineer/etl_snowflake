@@ -62,7 +62,7 @@ jobs:
           # Push los cambios al repositorio destino
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
 
 
       # - name: Clone data_set repository
