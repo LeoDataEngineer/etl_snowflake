@@ -1,10 +1,9 @@
 import requests
 import pandas as pd
 
+
 def get_data():
-   endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
-   
-  
+    endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
    
     try:
         response = requests.get(endpoint_subte)
