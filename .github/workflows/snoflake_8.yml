@@ -32,23 +32,56 @@ jobs:
         run: |
           mv data_snow.csv data_snow/
 
-      - name: Clone data_set repository
-        uses: actions/checkout@v2
-        with:
-          repository: LeoDataEngineer/subte_api_vercel
-          path: subte_api_vercel # Clone repository to a subdirectory
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout del código fuente
+      uses: actions/checkout@v2
+      
+    - name: Copiar archivos al repositorio destino
+      run: |
+        # Clona el repositorio destino
+         run: git clone https://github.com/LeoDataEngineer/subte_api_vercel.git mi_repo_destino
+        
+        # Copia o mueve los archivos al repositorio clonado
+        cp -R data_snow/* repo_destino/
+        
+        # Cambia al directorio del repositorio clonado
+        cd repo_destino
+        
+        # Configura Git
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        
+        # Agrega los archivos al área de preparación
+        git add .
+        
+        # Confirma los cambios
+        git commit -m "Enviar archivos desde el repositorio origen"
+        
+        # Push los cambios al repositorio destino
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
 
-      - name: Copy data_snow.csv to LeoDataEngineer/subte_api_vercel/data repository
-        run: |
-          mkdir -p data
-          cp ../data_snow/data_snow.csv data/
+      # - name: Clone data_set repository
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: LeoDataEngineer/subte_api_vercel
+      #     path: subte_api_vercel # Clone repository to a subdirectory
 
-      - name: Commit and push changes to LeoDataEngineer/subte_api_vercel/data/ repository
-        run: |
-          cd ..
-          git config user.email "you@example.com"
-          git config user.name "Your Name"
-          git add .
-          git commit -m "Update data"
-          git push
+      # - name: Copy data_snow.csv to LeoDataEngineer/subte_api_vercel/data repository
+      #   run: |
+      #     mkdir -p data
+      #     cp ../data_snow/data_snow.csv data/
+
+      # - name: Commit and push changes to LeoDataEngineer/subte_api_vercel/data/ repository
+      #   run: |
+      #     cd ..
+      #     git config user.email "you@example.com"
+      #     git config user.name "Your Name"
+      #     git add .
+      #     git commit -m "Update data"
+      #     git push
 
