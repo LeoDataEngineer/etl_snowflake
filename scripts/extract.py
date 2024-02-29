@@ -8,7 +8,7 @@ def get_data():
     client_id = os.environ['CLIENT_ID']
     client_secret= os.environ['CLIENT_SECRET'],
  
-    endpoint_subte = f"https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id={client_id}&client_secret={client_secret}"
+    endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id={client_id}&client_secret={client_secret}"
     try:
         response = requests.get(endpoint_subte)
         if response.status_code == 200:
