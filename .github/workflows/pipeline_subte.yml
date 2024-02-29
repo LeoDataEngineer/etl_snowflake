@@ -23,10 +23,10 @@ jobs:
       - name: Ejecutar script de extracción
         run: python ./scripts/extract.py
           
-      - name: Obtener credenciales
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      # - name: Obtener credenciales
+      #   env:
+      #     CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #     CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
       - name: Extraer datos a un archivo CSV
         uses: actions/upload-artifact@v2
