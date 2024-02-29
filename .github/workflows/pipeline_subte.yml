@@ -20,6 +20,12 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
+      - name: Debug de secretos
+        run: |
+          echo "CLIENT_ID: $CLIENT_ID"
+          echo "CLIENT_SECRET: $CLIENT_SECRET"
+  
+
       - name: Ejecutar script de extracción
         run: python ./scripts/extract.py
           
