@@ -16,10 +16,10 @@ jobs:
           cache: 'pip' # caching pip dependencies
       - run: pip install -r requirements.txt
       - run: python ./scripts/extract.py
-      - name: Obtener credenciales
-        env:
-             CLIENT_ID: ${{ secrets.CLIENT_ID }}
-             CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      # - name: Obtener credenciales
+      #   env:
+      #       CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      #       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       - name: Extrae data en un csv
         uses: actions/upload-artifact@v4
         with:
