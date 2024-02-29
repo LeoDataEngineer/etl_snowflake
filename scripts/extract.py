@@ -4,11 +4,11 @@ import os
 
 
 def get_data():
-    # endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
-    client_id = os.environ['CLIENT_ID']
-    client_secret= os.environ['CLIENT_SECRET']
+    endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id=eeea2fd521514498a37629a810012185&client_secret=14C6598f35E2498185685Ccfc6b2b372"
+    # client_id = os.environ['CLIENT_ID']
+    # client_secret= os.environ['CLIENT_SECRET']
  
-    endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id={client_id}&client_secret={client_secret}"
+    # endpoint_subte = "https://apitransporte.buenosaires.gob.ar/subtes/forecastGTFS?client_id={client_id}&client_secret={client_secret}"
     try:
         response = requests.get(endpoint_subte)
         if response.status_code == 200:
