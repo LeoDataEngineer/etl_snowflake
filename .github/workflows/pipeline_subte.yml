@@ -9,19 +9,27 @@ jobs:
   extract:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v3
         with:
           python-version: '3.10'
-          cache: 'pip' # caching pip dependencies
-      - run: pip install -r requirements.txt
-      - run: python ./scripts/extract.py
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar script de extracción
+        run: python ./scripts/extract.py
+          
       - name: Obtener credenciales
         env:
-            CLIENT_ID: ${{ secrets.CLIENT_ID }}
-            CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      - name: Extrae data en un csv
-        uses: actions/upload-artifact@v4
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Extraer datos a un archivo CSV
+        uses: actions/upload-artifact@v2
         with:
           name: subte_data_raw
           path: subte_data_raw.csv
@@ -30,19 +38,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: extract
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v3
         with:
           python-version: '3.10'
-          cache: 'pip' # caching pip dependencies
+
       - name: Descargar datos extraídos
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v2
         with:
           name: subte_data_raw
-      - run: pip install -r requirements.txt
-      - run: python ./scripts/processed.py
-      - name: Procesa data en un csv
-        uses: actions/upload-artifact@v4
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar script de procesamiento
+        run: python ./scripts/processed.py
+
+      - name: Procesar datos y subirlos a un archivo CSV
+        uses: actions/upload-artifact@v2
         with:
           name: subte_data_processed
           path: subte_data_processed.csv
@@ -51,17 +67,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: processed
     steps: 
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v3
         with:
           python-version: '3.10' 
-          cache: 'pip' # caching pip dependencies
-      - run: pip install -r requirements.txt
-      - name: Download users data from Extract Job
-        uses: actions/download-artifact@v4
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Descargar datos procesados del trabajo de extracción
+        uses: actions/download-artifact@v2
         with:
           name: subte_data_processed
-      - name: Subir datos a snowflake
+
+      - name: Subir datos a Snowflake
         run: python ./scripts/load.py
         env:
           SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
@@ -74,18 +96,19 @@ jobs:
     permissions: 
       contents: write
     steps:
-      - name: Checkout repo
+      - name: Checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Configurar Python
+        uses: actions/setup-python@v3
         with:
           python-version: '3.11'
           cache: 'pip'
-      - name: Install dependece
+
+      - name: Instalar dependencias
         run: pip install -r requirements.txt
 
-      - name: Crear directorio data_snow  y Run Script
+      - name: Crear directorio data_snow y ejecutar script
         run:  |
           mkdir -p data_snow
           python ./scripts/extract_from_snowflake.py
@@ -94,14 +117,15 @@ jobs:
           SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
 
-      - name: Move data_snow.csv to data_snow directory
+      - name: Mover data_snow.csv al directorio data_snow
         run: |
           mv data_snow.csv data_snow/
            
-      - name: commit and push changes
+      - name: Realizar commit y push de los cambios
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Update dataset
+          commit_message: Actualizar conjunto de datos
+
 
             
         # - name: Guardar CSV en otro repositorio
