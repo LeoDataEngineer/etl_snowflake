@@ -42,10 +42,12 @@ jobs:
         run: |
           # Clona el repositorio destino
           git clone https://github.com/LeoDataEngineer/subte_api_vercel.git subte_api_vercel
-        
+
+          # creamos el repositorio
+          mkadir -p  data_snow    
           # Copia o mueve los archivos al repositorio clonado
-          cp -R data_snow/* subte_api_vercel/
-        
+          cp -R data_snow/* subte_api_vercel/data_snow/
+          
           # Cambia al directorio del repositorio clonado
           cd subte_api_vercel
         
