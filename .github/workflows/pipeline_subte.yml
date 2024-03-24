@@ -8,6 +8,9 @@ on:
 jobs:
   extract:
     runs-on: ubuntu-latest
+    env:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
@@ -23,11 +26,6 @@ jobs:
       - name: Ejecutar script de extracción
         run: python ./scripts/extract.py
           
-      # - name: Obtener credenciales
-      #   env:
-      #     CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      #     CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-
       - name: Extraer datos a un archivo CSV
         uses: actions/upload-artifact@v2
         with:
